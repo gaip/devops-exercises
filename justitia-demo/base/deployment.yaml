@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+   name: justice-demo
+   labels:
+      app: justice-demo
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+      app: justice-demo
+  template:
+    metadata:
+      labels:
+         app: justice-demo
+    spec:
+      containers:
+      - name: justice-demo
+        image: nginx:alpine  # Wir nehmen erst mal nginx zum Testen, dein Image existiert vllt nicht
+        ports:
+        - containerPort: 8080 # WICHTIG: > 1024 (Kein Root)
+        securityContext:
+          runAsNonRoot: true         # WICHTIG: Wir akzeptieren jede Non-Root UID von OpenShift
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
