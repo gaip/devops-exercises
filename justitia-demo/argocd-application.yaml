@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-org/your-repo.git
-    targetRevision: HEAD
-    path: overlays/dev
+    repoURL: https://github.com/gaip/devops-exercises.git
+    targetRevision: justitia
+    path: justitia-demo/overlays/dev
   destination:
     server: https://kubernetes.default.svc
     namespace: hasan-turhal-dev
