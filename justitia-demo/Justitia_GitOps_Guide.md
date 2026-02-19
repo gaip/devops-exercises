@@ -668,3 +668,53 @@ Ensuring our "Torte" (Image) has arrived safely in the storage.
 **4. Memorize:**
 > **Green ✅** = Mission Accomplished.
 > **Package** = The stored product.
+
+---
+
+## 27. The Heartbeat: Liveness vs. Readiness 🩺💓
+**1. Explain Goal:**
+Teaching Kubernetes to monitor our app like a doctor monitors a patient.
+
+**2. The Analogy (The Waiter's Shift):**
+*   **Liveness (Still Breathing?)**: 💓
+    *   *Analogy*: Does the waiter still have a pulse? If not, he has fainted (crashed).
+    *   *Action*: Kubernetes will **restart** the container (bring a new waiter).
+*   **Readiness (Ready to Work?)**: 🍽️
+    *   *Analogy*: The waiter has a pulse, but is he still tying his apron or washing his hands?
+    *   *Action*: Kubernetes will **wait** and not send any customers (Traffic) to his table until he is ready.
+
+**3. The Endpoints:**
+*   `/health`: For Liveness ("I am alive").
+*   `/ready`: For Readiness ("I am ready to take orders").
+
+**4. Memorize:**
+> **Liveness** = Restart if failed.
+> **Readiness** = Pause traffic if busy.
+
+---
+
+## 28. The Doctor's Visit: Configuring Probes 🚑📁
+**1. Explain Goal:**
+Setting the "Medical Record" for Kubernetes to know how and when to check the app.
+
+**2. The Analogy (The Clinical Parameters):**
+*   **`initialDelaySeconds` (Wartezeit nach Aufstehen)**: ⏳
+    *   *Analogy*: Man weckt jemanden nicht auf und fragt sofort: *"Kannst du Marathon laufen?"*. Man gibt ihm 5 Sekunden Zeit, um die Augen zu öffnen.
+*   **`periodSeconds` (Untersuchungs-Intervall)**: ⏱️
+    *   *Analogy*: Der Arzt kommt alle 10 Sekunden vorbei, um nach dem Rechten zu sehen.
+*   **`httpGet` (Der Testmodus)**: 📡
+    *   *Analogy*: Der Arzt schickt eine Nachricht an das Zimmer (den Endpoint `/health`). Wenn die Antwort "UP" ist, geht er weiter.
+
+**3. The Configuration (The Contract):**
+```yaml
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+```
+
+**4. Memorize:**
+> **Initial Delay** = Aufwachphase.
+> **Period** = Das Intervall (Wie oft?).

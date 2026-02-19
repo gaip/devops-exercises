@@ -19,6 +19,18 @@ spec:
         image: ghcr.io/gaip/justitia-dashboard:latest # UNSERE NEUE TORTE! 🎂
         ports:
         - containerPort: 8080 # WICHTIG: > 1024 (Kein Root)
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 2
+          periodSeconds: 5
         securityContext:
           runAsNonRoot: true         # WICHTIG: Wir akzeptieren jede Non-Root UID von OpenShift
           allowPrivilegeEscalation: false

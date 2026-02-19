@@ -29,13 +29,24 @@ def index():
         "version": "1.0.0",
         "endpoints": {
             "users": "/users",
-            "health": "/health"
+            "health": "/health",
+            "ready": "/ready"
         }
     })
 
 @app.route("/health", methods=['GET'])
 def health():
+    """Liveness check: Is the process still alive?"""
     return jsonify({"status": "UP", "database": "Connected"})
+
+@app.route("/ready", methods=['GET'])
+def ready():
+    """Readiness check: Is the app ready to serve traffic?"""
+    # Hier könnten wir z.B. prüfen, ob die user.json geladen wurde
+    if users:
+        return jsonify({"status": "READY"})
+    else:
+        return make_response(jsonify({"status": "NOT_READY"}), 503)
 
 @app.route("/users", methods=['GET'])
 def all_users():
