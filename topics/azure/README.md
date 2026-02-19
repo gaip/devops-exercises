@@ -126,6 +126,15 @@ Running parallel and high-performance computing applications
 
 <details>
 <summary>What is the N-tier architecture?</summary><br><b>
+
+N-tier architecture is a software architecture pattern that separates an application into multiple logical layers or tiers. Each tier has a specific responsibility and communicates with adjacent tiers.
+
+Common tiers include:
+*   **Presentation Tier (Frontend):** The user interface and user interaction layer. In Kubernetes, this is often a frontend service backed by a deployment of frontend pods.
+*   **Application Tier (Backend):** The business logic and data processing layer. This tier processes requests from the frontend and interacts with the data tier.
+*   **Data Tier (Database):** The data storage and retrieval layer. This can be a managed database service (like Azure SQL or RDS) or a stateful application within the cluster.
+
+This separation allows for independent scaling, maintenance, and development of each tier. For example, you can scale the frontend tier independently of the backend tier based on user load.
 </b></details>
 
 ### Storage

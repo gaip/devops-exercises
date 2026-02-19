@@ -1,0 +1,38 @@
+name: Justitia 4.0 CI/CD
+
+on:
+  push:
+    branches: [ master ] # Deinen Branch eintragen (z.B. master oder justitia)
+    paths:
+      - 'justitia-demo/src/**'
+      - 'justitia-demo/Dockerfile'
+      - 'justitia-demo/.github/workflows/build-and-deploy.yaml'
+
+jobs:
+  build-and-push:   
+    runs-on: ubuntu-22.04 # <--- Stabil & Gepinned (dein Wunsch!)
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Code abholen
+        uses: actions/checkout@v3
+
+      - name: Docker Werkzeuge bereitstellen
+        uses: actions/setup-docker-buildx-action@v2
+
+      - name: Im Lager (GitHub Registry) anmelden
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Container backen und verschicken
+        uses: docker/build-push-action@v4
+        with:
+          context: ./justitia-demo
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/justitia-dashboard:latest

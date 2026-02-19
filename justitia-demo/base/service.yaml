@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: justice-demo
+  labels:
+    app: justice-demo
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: justice-demo

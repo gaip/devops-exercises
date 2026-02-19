@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: app-config
+    namespace: prod
+data:
+  ENV: "production"
+  DB_HOST: "prod-db.local:5432"
+  DEBUG: "false"
+  NAMESPACE: "prod"

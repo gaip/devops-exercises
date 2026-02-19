@@ -3,6 +3,7 @@ kind: Application
 metadata:
   name: justice-demo
   namespace: openshift-gitops
+patches:
 spec:
   project: default
   source:
@@ -16,3 +17,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+  syncOptions:
+    - CreateNamespace=true

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: app-config
+    namespace: dev  
+data:
+  ENV: "development"
+  DB_HOST: "dev-db.local:5432"
+  DEBUG: "true"
+  NAMESPACE: "dev"

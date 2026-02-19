@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config-dev
+data:
+  ENVIRONMENT: "development"
+  DB_HOST: "dev-database.local:5432"
+  DEBUG: "true"

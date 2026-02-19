@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: namespace-demo-deployment
+    namespace: dev
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: namespace-demo
+    template:
+        metadata:
+            labels:
+                app: namespace-demo
+        spec:
+            containers:
+                - name: web-app
+                  image: configmap-namespaces:v1
+                  imagePullPolicy: Never
+                  ports:
+                      - containerPort: 5000
+                  envFrom:
+                    - configMapRef:
+                        name: app-config
+                
+
+

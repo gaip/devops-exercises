@@ -1,0 +1,267 @@
+# Walkthrough: Azure Journey ☁️
+
+## Module 1: Storage Accounts (The Warehouse) 📦 [Completed]
+
+### 📦 Step 1: Login
+```bash
+az account show
+```
+
+### 📦 Step 2: Resource Group
+```bash
+az group create --name learning-azure-rg --location switzerlandnorth
+```
+
+### 🏭 Step 3: Storage Account
+```bash
+az storage account create \
+  --name learningstorage<yourname> \
+  --resource-group learning-azure-rg \
+  --location switzerlandnorth \
+  --sku Standard_LRS
+```
+
+### 🗄️ Step 4: Container
+```bash
+az storage container create \
+  --name secure-files \
+  --account-name <yourname> \
+  --auth-mode login
+```
+
+### 📤 Step 5: Upload Blob (with Master Key)
+```bash
+az storage blob upload \
+  --container-name secure-files \
+  --file secret.txt \
+  --name secret.txt \
+  --account-name <yourname> \
+  --auth-mode key
+```
+
+### 🛡️ Step 6: Verification (SAS)
+```bash
+az storage blob generate-sas \
+  --container-name secure-files \
+  --name secret.txt \
+  --account-name <yourname> \
+  --permissions r \
+  --expiry $(date -u -v+1H +%Y-%m-%dT%H:%MZ) \
+  --auth-mode key \
+  --full-uri
+```
+
+### 🧹 Step 7: Cleanup
+```bash
+az group delete --name learning-azure-rg --no-wait --yes
+```
+
+---
+
+## Module 2: Virtual Machines (The Computer) 💻 [Current]
+
+We are creating a Computer in the Sky.
+
+### 📦 Step 1: The Box (Resource Group)
+We need the box again.
+*   **Analogy**: You can't put a computer in mid-air. You need a room (Resource Group).
+
+**Memorizable Rule**: 
+- **Start with the Box.** Always.
+
+### ⌨️ Command to Run:
+```bash
+az group create --name learning-azure-rg --location eastus
+```
+✅ **Done** — recreated in `eastus`.
+
+💡 **Lessons learned**:
+1. You CANNOT change a Resource Group's region. Delete & recreate if you need a different region.
+2. Not every VM size is available in every region (`SkuNotAvailable` error).
+3. `--no-wait` lets deletes run in the background.
+
+---
+
+### 💻 Step 2: The Computer (VM Create)
+We are buying a computer. It needs a name, an OS, a size, and a key.
+
+*   **Analogy**: Buying a laptop online — pick OS, pick specs, get a login key.
+
+**Memorizable Rules:**
+- **B1s = Budget, 1 core, small** (cheapest for learning)
+- **1 command = 5 resources** (VM + NIC + NSG + Public IP + Disk)
+- **VM region = Resource Group region** (always)
+
+### ⌨️ Command to Run:
+```bash
+az vm create \
+  --resource-group learning-azure-rg \
+  --name myFirstVM \
+  --image Ubuntu2204 \
+  --size Standard_B1s \
+  --admin-username azureuser \
+  --generate-ssh-keys
+```
+
+---
+*Next: SSH into the Computer (The Remote Control).*
+
+---
+
+## Module 3: Containers on Azure (ACR + ACI) 🧱 [Planned]
+
+We will plan the container journey before creating anything.
+
+### 🧭 Step 1: Collect Information
+**Goal:** Capture the minimum details needed to build the ACR → ACI flow shown in the diagram.
+
+**Proposed meaning (unless you prefer something else):**
+- **Image source**: local Docker image built from a simple app
+- **Registry**: Azure Container Registry (ACR)
+- **Runtime**: Azure Container Instances (ACI)
+
+**Answers to capture:**
+1) App type: **Hello web** or **API**
+2) Container port: **80** or **8080**
+3) Image name/tag: **your choice**
+4) Region: **switzerlandnorth** or **eastus** (pick one)
+5) Resource group: **learning-azure-rg** (reuse or new)
+
+---
+*Next: Confirm the container architecture.*
+
+### 🧭 Step 2: Confirm Architecture
+**Goal:** Lock the target layout based on the diagram.
+
+**Proposed plan (based on the diagram):**
+- Build a Docker image locally
+- Push the image to **ACR**
+- Create a **Container Instance** from that image
+- Access the app over a public IP
+
+**Confirm this is correct (yes/no).** If anything differs (service choice, names, region), tell me.
+
+---
+*Next: Verify Azure CLI context and start provisioning.*
+
+---
+
+### 🧠 Visualization + Memory Techniques
+
+**Visual map (PaaS vs IaaS vs On‑prem):**
+
+PaaS (App Service) → you bring **app + data**, Azure runs **OS + HW**
+IaaS (VM) → you bring **app + OS + libs**, Azure runs **HW**
+On‑prem → you run **everything**
+
+**Box model (from the diagram):**
+- **App Service box**: app + data
+- **VM box**: app + OS
+- **On‑prem box**: app + libs + OS + HW
+
+**Mnemonic 1 (Responsibility ladder):**
+- **PaaS = "App + Data"** (Azure handles the rest)
+- **IaaS = "OS + App"** (you manage more)
+- **On‑prem = "All"** (you own everything)
+
+**Mnemonic 2 (Scaling hint):**
+- **PaaS = easy scaling**
+- **IaaS = some scaling**
+- **On‑prem = hard scaling**
+
+**Quick recall drill (10 seconds):**
+1) Say: **"PaaS = App + Data"**
+2) Say: **"IaaS = OS + App"**
+3) Say: **"On‑prem = All"**
+
+---
+
+### 🖥️ Portal Visualization (App Service Create)
+
+Use this screen as your visual anchor:
+- **Create Web App** → pick **Region** (**Switzerland North** or **East US**)
+- **App Service plan** → choose **Free F1** to practice cheaply
+- **Review + create** to deploy
+
+**Memory hook:**
+- **Plan = price + region** (match plan to your region)
+
+---
+
+### 🗄️ Portal Visualization (Database Tab)
+
+Use this screen as your visual anchor:
+- **Database tab** → **Create a Database**
+- **Engine** dropdown → SQL / Postgres / MySQL / Cosmos DB (MongoDB API)
+- Fill **Server name** + **Database name**
+  - Example: **appforsession-server**, **appforsession-database**
+
+**Memory hook:**
+- **Database = Engine + Names**
+
+**Optional:**
+- **Cache** → enable only if you need faster reads later
+
+**Review screen check:**
+- **Database Region** must match **Switzerland North** or **East US**
+- If it shows another region (e.g., Canada), go back and change **Region** before creating
+
+---
+
+### ✅ Deployment Status Visualization
+
+Use this screen as your visual anchor:
+- **Deployment is in progress** → wait until all rows show **OK**
+- Click **appforsession** (Web App) when done
+
+**Memory hook:**
+- **Green checks = go live**
+
+---
+
+### 🚦 Deployment Slots (Pro Feature)
+
+**What you’ll see on Free/Basic:**
+- **Deployment slots** show an **Upgrade** button
+
+**What to do now:**
+- Use **Deployment Center** or **App Service → Browse** for your first deploy
+- If you need slots later, upgrade to **Standard** or higher
+
+---
+
+## Module 4: PaaS App Service + DNS (The Playstore) 🧩 [Planned]
+
+We will plan the PaaS journey before creating anything.
+
+### 🧭 Step 1: Collect Information
+**Goal:** Capture the minimum details needed to build the PaaS flow shown in the diagram.
+
+**Proposed meaning (unless you prefer something else):**
+- **Compute**: Azure App Service
+- **Data**: Azure Storage or Azure SQL (pick one)
+- **Name**: Public app URL
+
+**Answers to capture:**
+1) App type: **static web** or **simple API**
+2) Runtime: **Node.js / Python / .NET**
+3) Data option: **Storage** or **SQL**
+4) Custom domain: **yes/no** (DNS)
+5) Region: **switzerlandnorth** or **eastus** (pick one)
+6) Resource group: **learning-azure-rg** (reuse or new)
+
+---
+*Next: Confirm the PaaS architecture.*
+
+### 🧭 Step 2: Confirm Architecture
+**Goal:** Lock the target layout based on the diagram.
+
+**Proposed plan (based on the diagram):**
+- App runs on **Azure App Service**
+- Data stored in **Azure Storage** or **Azure SQL**
+- Optional **custom DNS** for a friendly URL
+
+**Confirm this is correct (yes/no).** If anything differs (service choice, names, region), tell me.
+
+---
+*Next: Verify Azure CLI context and start provisioning.*

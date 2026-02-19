@@ -1,0 +1,22 @@
+{
+    "hasan": {
+        "name": "Hasan Turhal",
+        "role": "Admin",
+        "access": "Full"
+    },
+    "dev": {
+        "name": "Dev",
+        "role": "Developer",
+        "access": "Read-Write"
+    },
+    "test": {
+        "name": "Test",
+        "role": "Tester",
+        "access": "Read"
+    },
+    "justice-admin": {
+        "name": "Federal Auditor",
+        "role": "Auditor",
+        "access": "Security-Audit"
+    }
+}

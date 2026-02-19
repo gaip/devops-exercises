@@ -1,0 +1,26 @@
+apiVersion : apps/v1
+kind : Deployment
+metadata:
+  name: security-lab-deployment
+  namespace: security-lab
+spec: 
+  replicas: 2
+  selector:
+    matchLabels:
+      app: security-lab
+  template:
+    metadata:
+      labels: 
+        app: security-lab
+    spec:
+      containers:
+      - name: web-app
+        image: security-lab:v1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: app-settings
+        - secretRef:
+            name: app-vault
