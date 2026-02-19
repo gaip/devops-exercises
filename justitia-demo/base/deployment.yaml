@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: justice-demo
-        image: nginxinc/nginx-unprivileged:stable-alpine  # Fix: Unprivileged Nginx for OpenShift Sandbox
+        image: ghcr.io/gaip/justitia-dashboard:latest # UNSERE NEUE TORTE! 🎂
         ports:
         - containerPort: 8080 # WICHTIG: > 1024 (Kein Root)
         securityContext:
