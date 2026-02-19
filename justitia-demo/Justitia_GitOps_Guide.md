@@ -651,3 +651,20 @@ Removing files that are already tracked by Git so the `.gitignore` can do its jo
 **3. Memorize:**
 > **RM --cached** = Reset the Memory (Clear the waiting room).
 > **Push Branch** = Send to the right destination.
+---
+
+## 25. The Warehouse Check: Inventory Verification 📋🏗️
+**1. Explain Goal:**
+Ensuring our "Torte" (Image) has arrived safely in the storage.
+
+**2. The Analogy (The Inventory Check):**
+*   **GitHub Actions Log**: The **Security Camera**. You check the footage to see if the robot finished the work without tripping over.
+*   **GHCR.io (Packages)**: The **Warehouse Shelf**. You go to the shelf to see if the box with the "Justitia Dashboard" label is actually sitting there.
+
+**3. Verification Steps:**
+1.  **Actions Tab**: Check for the Green Checkmark ✅.
+2.  **Packages**: Go to your GitHub Profile -> Packages. You should see `justitia-dashboard`.
+
+**4. Memorize:**
+> **Green ✅** = Mission Accomplished.
+> **Package** = The stored product.
