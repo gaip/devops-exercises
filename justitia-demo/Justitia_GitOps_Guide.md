@@ -717,4 +717,20 @@ livenessProbe:
 
 **4. Memorize:**
 > **Initial Delay** = Aufwachphase.
-> **Period** = Das Intervall (Wie oft?).
+---
+
+## 29. Self-Healing: The Miracle of Life 🪄🩹
+**1. Explain Goal:**
+Watching Kubernetes fix problems automatically.
+
+**2. The Analogy (The Automatic Replacement):**
+*   **The Problem**: A pod gets "stuck" (Liveness fails).
+*   **The Magic**: Kubernetes doesn't wait for a human. It sees the failed heartbeat, kills the container, and starts a fresh one. This is **Self-Healing**.
+
+**3. How to watch (The Stethoscope):**
+*   `oc get pods`: Check the **RESTARTS** column. If it's > 0, the doctor had to intervene!
+*   `oc describe pod <pod-name>`: Look for **Events** at the bottom. You should see "Liveness probe failed" or "Readiness probe failed" if things went wrong.
+
+**4. Memorize:**
+> **Restarts > 0** = Heal in progress.
+> **Events** = The medical history.
