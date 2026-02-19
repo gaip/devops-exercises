@@ -733,4 +733,26 @@ Watching Kubernetes fix problems automatically.
 
 **4. Memorize:**
 > **Restarts > 0** = Heal in progress.
-> **Events** = The medical history.
+
+---
+
+## 30. The Control Room: Accessing ArgoCD 🕹️📟
+**1. Explain Goal:**
+Finding the entrance to the GitOps control center.
+
+**2. The Analogy (The Secret Passage):**
+*   **The Problem**: Our application has its own door (`justice-demo` Route), but where is the manager's office (ArgoCD)?
+*   **The Grid (Application Launcher)**: In OpenShift, there is a "Magic Grid" icon in the top right. It contains shortcuts to all your tools.
+
+**3. How to Find it:**
+1.  Open the **OpenShift Web Console**.
+2.  Look at the **Top Right Navigation Bar**.
+3.  Click the **Grid Icon** (Application Launcher) 🎛️.
+4.  Select **"Cluster GitOps"** or **"ArgoCD"**.
+
+**4. The Hypothesized URL:**
+*   `https://argocd-server-openshift-gitops.<your-cluster-domain>`
+*   *(In your case likely):* `https://argocd-server-openshift-gitops.apps.rm1.0a51.p1.openshiftapps.com`
+
+**5. Memorize:**
+> **The Grid** = The shortcut to the Manager (ArgoCD).
