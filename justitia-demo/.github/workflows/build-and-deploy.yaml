@@ -2,15 +2,15 @@ name: Justitia 4.0 CI/CD
 
 on:
   push:
-    branches: [ master ] # Deinen Branch eintragen (z.B. master oder justitia)
+    branches: [ main ] 
     paths:
-      - 'justitia-demo/src/**'
-      - 'justitia-demo/Dockerfile'
-      - 'justitia-demo/.github/workflows/build-and-deploy.yaml'
+      - 'src/**'
+      - 'Dockerfile'
+      - '.github/workflows/build-and-deploy.yaml'
 
 jobs:
   build-and-push:   
-    runs-on: ubuntu-22.04 # <--- Stabil & Gepinned (dein Wunsch!)
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: write
@@ -32,7 +32,7 @@ jobs:
       - name: Container backen und verschicken
         uses: docker/build-push-action@v4
         with:
-          context: ./justitia-demo
+          context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/justitia-dashboard:latest
+            ghcr.io/${{ github.repository_owner }}/ustitia-dashboard:latest

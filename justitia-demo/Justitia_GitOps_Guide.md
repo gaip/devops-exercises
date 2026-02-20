@@ -750,9 +750,108 @@ Finding the entrance to the GitOps control center.
 3.  Click the **Grid Icon** (Application Launcher) 🎛️.
 4.  Select **"Cluster GitOps"** or **"ArgoCD"**.
 
-**4. The Hypothesized URL:**
-*   `https://argocd-server-openshift-gitops.<your-cluster-domain>`
-*   *(In your case likely):* `https://argocd-server-openshift-gitops.apps.rm1.0a51.p1.openshiftapps.com`
+**4. Troubleshooting (The Locked Door):** 🚑🔐
+*   **The Error**: "Application is not available" means the URL is wrong.
+*   **Method A (The Explorer)**: Open your standard **OpenShift Web Console**.
+    1. Click the **Grid Icon** (Application Launcher) in the top right.
+    2. Look for **"Cluster GitOps"**.
+*   **Method B (The Guess)**:
+    *   Try: `https://argocd-cluster-openshift-gitops.apps.rm1.0a51.p1.openshiftapps.com`
+    *   *(Note: Sandbox URLs can change!)*
+
+
+---
+
+## 31. The Mystery of the Missing Manager (ArgoCD) 🕵️‍♂️👻
+**1. Explain Goal:**
+Finding ArgoCD when it's not in the usual places.
+
+**2. The Problem:**
+In the "Red Hat Developer Sandbox", the ArgoCD link can be shy. If the "Grid" icon doesn't show it, it's usually hiding in the **Developer Sidebar**.
+
+**3. The Steps to Find It:**
+1.  **Expand the Sidebar**: Click the **"Hamburger" Menu** (3 lines) in the top left corner of the OpenShift Console.
+2.  **Look for "GitOps"**: In the **Developer perspective**, there is often a dedicated **"GitOps"** tab.
+3.  **The "Application" Error**: If `oc apply -f argocd-application.yaml` fails with *"no matches for kind Application"*, it means the ArgoCD Operator is **NOT** installed. 
+    *   **Reason**: Sandbox environments often lock this down.
+    *   **Fix**: Switch to **Manual GitOps** (`oc apply -k`).
+
+**4. Alternative: Manual GitOps (The Hand-Operated Way)**
+If ArgoCD is truly missing or locked:
+*   We use the **`oc apply -k <path>`** command. It does exactly what ArgoCD does, but manually.
 
 **5. Memorize:**
-> **The Grid** = The shortcut to the Manager (ArgoCD).
+> **Hamburger Menu** = The map expander.
+
+---
+
+## 32. The Handbrake: Manual Sync Verification 🏥✅
+**1. Explain Goal:**
+Verifying that OpenShift accepted our manual commands and that the "Doctors" (Probes) are on duty.
+
+**2. The Command (The Pulse Check):**
+```bash
+oc get pods -l app=justice-demo
+```
+*   **Target**: The pods should be very "young" (Age: < 1m).
+*   **Ready**: It should show `1/1`.
+
+**3. The Deep Scan (The X-Ray):**
+```bash
+oc describe pod -l app=justice-demo | grep -A 5 "Probes"
+```
+*   **Verification**: You should see both `Liveness` and `Readiness` listed with HTTP GET to `/health` and `/ready`.
+
+**4. The Self-Healing Test (Coming Soon):**
+*   We will simulate a crash and watch Kubernetes restart the pod automatically.
+
+**5. Memorize:**
+> **`oc apply -k`** = Manual GitOps.
+
+---
+
+## 34. The Fresh Start: Migrating to `ustitia-demo` 🚚🏗️
+**1. Explain Goal:**
+Starting over in a clean, dedicated repository to solve permission and organization issues.
+
+**2. The Migration Map:**
+*   **Old**: `gaip/devops-exercises/justitia-demo`
+*   **New**: `gaip/ustitia-demo` (Dedicated & Clean)
+
+**3. The Steps Done:**
+1.  **Repo Init**: `git init` in the proyecto folder.
+2.  **Remote Switch**: Pointed to `https://github.com/gaip/ustitia-demo.git`.
+3.  **Workflow Update**: CI/CD now builds `ghcr.io/gaip/ustitia-dashboard:latest`.
+
+**4. The Manual Sync (New Way):**
+```bash
+oc apply -k overlays/dev
+```
+
+**5. Memorize:**
+> **New Repo** = Fresh start, fewer bugs.
+
+---
+
+## 35. The Secret Agent: Using Private Images 🔐🕵️‍♂️
+**1. Explain Goal:**
+Accessing a private container image from OpenShift without making it public.
+
+**2. The Concept (The Secret Knock):**
+Kubernetes needs a **"Secret"** (a stored password) to prove to GitHub that it has permission to pull the image.
+
+**3. The Steps:**
+1.  **Create a Token**: Go to GitHub -> Settings -> Developer Settings -> Personal access tokens (classic). Generate a token with `read:packages` scope.
+2.  **Create the Secret in OpenShift**:
+    ```bash
+    oc create secret docker-registry github-pull-secret \
+      --docker-server=ghcr.io \
+      --docker-username=<your-github-username> \
+      --docker-password=<your-token> \
+      --docker-email=<your-email>
+    ```
+3.  **Link the Secret**: Add `imagePullSecrets` to your deployment.
+
+**4. Memorize:**
+> **`ImagePullSecret`** = The cluster's credentials.
+> **Personal Access Token** = The master key.

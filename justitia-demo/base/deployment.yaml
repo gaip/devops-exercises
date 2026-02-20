@@ -14,9 +14,11 @@ spec:
       labels:
          app: justice-demo
     spec:
+      imagePullSecrets:
+      - name: github-pull-secret
       containers:
       - name: justice-demo
-        image: ghcr.io/gaip/justitia-dashboard:latest # UNSERE NEUE TORTE! 🎂
+        image: ghcr.io/gaip/ustitia-dashboard:latest # UNSERE NEUE TORTE! 🎂
         ports:
         - containerPort: 8080 # WICHTIG: > 1024 (Kein Root)
         livenessProbe:
